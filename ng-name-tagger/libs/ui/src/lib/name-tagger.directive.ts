@@ -72,12 +72,15 @@ export class NameTaggerDirective implements OnInit {
       }),
       filter(user => !!user),
       tap(() => {
-        const component: ComponentRef<UserPanelComponent> = this.viewContainerRef.createComponent(UserPanelComponent);
-        const textareaPosition = this.el.nativeElement.getBoundingClientRect();
-        // add 1rem for line-height + 4 for padding/margin
-        component.setInput('panelPositionY', (textareaPosition.top + 20)  + 'px');
-        component.setInput('panelPositionX', (textareaPosition.left + 4)  + 'px');
-        component.setInput('selectionHandler', this.updateTextWithUserSelection)
+        // check if the viewContainer exists, so we don't make several of them.
+        if (!this.viewContainerRef.length) {
+          const component: ComponentRef<UserPanelComponent> = this.viewContainerRef.createComponent(UserPanelComponent);
+          const textareaPosition = this.el.nativeElement.getBoundingClientRect();
+          // add 1rem for line-height + 4 for padding/margin
+          component.setInput('panelPositionY', (textareaPosition.top + 20)  + 'px');
+          component.setInput('panelPositionX', (textareaPosition.left + 4)  + 'px');
+          component.setInput('selectionHandler', this.updateTextWithUserSelection);
+        }
       })
     ).subscribe(
       (res: User[]) => {
@@ -92,7 +95,7 @@ export class NameTaggerDirective implements OnInit {
       this.el.nativeElement.value = this.tagService.replaceTextWithValue(this.el.nativeElement.value, fullName)
       this.clearViewContainer();
       this.el.nativeElement.focus();
-      this.el.nativeElement.setSelectionRange(this.el.nativeElement.value.length -1 , this.el.nativeElement.value.length -1);
+      this.el.nativeElement.setSelectionRange(this.el.nativeElement.value.length , this.el.nativeElement.value.length);
     } else {
       return;
     }

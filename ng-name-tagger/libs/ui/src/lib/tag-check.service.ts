@@ -28,6 +28,10 @@ export class TagCheckService {
     // compiler wants match and index to be defined here but the compiler complains about the typings
     if (match?.index !== null && match?.index !== undefined) {
 
+      if (text.length < value.length) {
+        return `${value}`;
+      }
+
       return `${text.substring(0, match.index)} ${value} ${text.substring(match.index + match[0].length, text.length)}`;
     } else {
       return text;
