@@ -1,0 +1,5 @@
+<h2>Comments:</h2>
+<ng-container *ngIf="(store.comments$ | ngrxPush) as comments">
+    <comment-list [comments]="comments"/>
+</ng-container>
+<comment-form-interface [userSet]="store.users$ | ngrxPush"/>
